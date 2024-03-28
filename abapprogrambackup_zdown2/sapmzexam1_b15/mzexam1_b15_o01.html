@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<title>MZEXAM1_B15_O01</title>
+</head>
+<body bgcolor="#FFFFE0">
+<font size="3" face = "Arial" color="#000000"><b>Code listing for: MZEXAM1_B15_O01</b></font>
+<br>
+<font size="3" face = "Arial" color="#000000"><b>Description:  Include MZEXAM1_B15_O01</b></font>
+<hr>
+<pre width="100">
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& Include          MZEXAM1_B15_O01</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& Module STATUS_0100 OUTPUT</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+MODULE status_0100 OUTPUT.
+  SET PF-STATUS 'STATUS_100'.
+  SET TITLEBAR 'TITLE_100'.
+ENDMODULE.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& Module GET_MEMBER OUTPUT</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+MODULE get_member OUTPUT.
+  IF gs_member IS NOT INITIAL.
+    MOVE-CORRESPONDING gs_member TO ztmember_b15.
+  ENDIF.
+
+ENDMODULE.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& Module CLEAR_OK_CODE OUTPUT</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+MODULE clear_ok_code OUTPUT.
+  CLEAR ok_code.
+ENDMODULE.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& Module FILL_DYNNR OUTPUT</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+MODULE fill_dynnr OUTPUT.
+  CASE my_tabstrip-activetab.
+    WHEN 'FC1'.
+      dynnr = '0110'.
+    WHEN 'FC2'.
+      dynnr = '0120'.
+    WHEN OTHERS.
+      my_tabstrip-activetab = 'FC1'.
+      dynnr = '0110'. "디폴트 값 없이 최초 실행 시 호출
+
+  ENDCASE.
+
+ENDMODULE.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& Module STATUS_0110 OUTPUT</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+MODULE status_0110 OUTPUT.
+<font color ="#0000FF">* SET PF-STATUS 'xxxxxxxx'.</font>
+<font color ="#0000FF">* SET TITLEBAR 'xxx'.</font>
+  ZTRENT_b15-rent_dt = sy-datum.
+ENDMODULE.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& Module STATUS_0120 OUTPUT</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+MODULE status_0120 OUTPUT.
+<font color ="#0000FF">* SET PF-STATUS 'xxxxxxxx'.</font>
+<font color ="#0000FF">* SET TITLEBAR 'xxx'.</font>
+ENDMODULE.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& Module SET_ICON OUTPUT</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+MODULE set_icon OUTPUT.
+  IF gs_member-mb_st EQ 'B'.
+    icon_name = 'ICON_RED_LIGHT'.
+    PERFORM icon_create USING icon_name CHANGING icon.
+  ELSEIF gs_member-mb_st EQ 'A'.
+    icon_name = 'ICON_GREEN_LIGHT'.
+    PERFORM icon_create USING icon_name CHANGING icon.
+  ELSE.
+    CLEAR icon.
+  ENDIF.
+
+ENDMODULE.
+
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& Module GET_PUSH_STATUS OUTPUT</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+MODULE get_push_status OUTPUT.
+  IF gs_member-mb_st NE 'A' OR ztbook_b15-book_st NE 'A'.
+    LOOP AT SCREEN.
+      IF screen-name = 'PUSHBUTTON'.
+        screen-input = 0.
+      ENDIF.
+      MODIFY SCREEN.
+    ENDLOOP.
+  ENDIF.
+ENDMODULE.
+</pre>
+<hr>
+<font size="2" face = "Sans Serif">Extracted by Direct Download Enterprise version 1.3.1 - E.G.Mellodew. 1998-2005 UK. Sap Release 754
+</font>
+</body>
+</html>

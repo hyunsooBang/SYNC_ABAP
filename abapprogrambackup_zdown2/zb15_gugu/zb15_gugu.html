@@ -1,0 +1,46 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<title>ZB15_GUGU</title>
+</head>
+<body bgcolor="#FFFFE0">
+<font size="3" face = "Arial" color="#000000"><b>Code listing for: ZB15_GUGU</b></font>
+<br>
+<font size="3" face = "Arial" color="#000000"><b>Description:  gugudan 만들기 연습</b></font>
+<hr>
+<pre width="100">
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& Report ZB15_GUGU</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+REPORT zb15_gugu.
+
+PARAMETERS pa_num TYPE i.
+
+DATA gv_res TYPE i.
+
+IF pa_num BETWEEN 2 AND 9.
+  DO 9 TIMES.
+    gv_res = pa_num * sy-index.
+    WRITE: / pa_num, '*', sy-index, '=', gv_res.
+  ENDDO.
+
+ELSEIF pa_num = 0. "값을 입력하지 않았을 때
+  WRITE: TEXT-001.
+
+ELSE.
+  WRITE: TEXT-002. "num&lt;2 or num&gt;9
+
+ENDIF.
+
+<font color ="#0000FF">*Text elements</font>
+<font color ="#0000FF">*----------------------------------------------------------</font>
+<font color ="#0000FF">* 001 parameter 값을 입력하세요.</font>
+<font color ="#0000FF">* 002 2와 9사이의 값을 입력하세요  .</font>
+</pre>
+<hr>
+<font size="2" face = "Sans Serif">Extracted by Direct Download Enterprise version 1.3.1 - E.G.Mellodew. 1998-2005 UK. Sap Release 754
+</font>
+</body>
+</html>

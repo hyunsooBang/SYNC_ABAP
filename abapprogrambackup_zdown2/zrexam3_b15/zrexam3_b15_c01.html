@@ -1,0 +1,88 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<title>ZREXAM3_B15_C01</title>
+</head>
+<body bgcolor="#FFFFE0">
+<font size="3" face = "Arial" color="#000000"><b>Code listing for: ZREXAM3_B15_C01</b></font>
+<br>
+<font size="3" face = "Arial" color="#000000"><b>Description:  Include ZREXAM3_B15_C01</b></font>
+<hr>
+<pre width="100">
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& Include          ZREXAM3_B15_C01</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+
+CLASS lcl_event DEFINITION.
+  PUBLIC SECTION.
+    DATA: gv_rowid type i.
+    METHODS: handle_double_click FOR EVENT double_click
+      OF cl_gui_alv_grid
+      IMPORTING e_row
+                e_column
+                es_row_no,
+
+      handle_on_toolbar
+        FOR EVENT toolbar OF cl_gui_alv_grid
+        IMPORTING e_object,
+
+       on_user_command FOR EVENT user_command
+        OF cl_gui_alv_grid
+        IMPORTING e_ucomm.
+ENDCLASS.
+
+CLASS lcl_overfee DEFINITION.
+  PUBLIC SECTION.
+    METHODS
+      get_overfee
+        IMPORTING iv_date TYPE ztrent_b15-rplan_dt
+        EXPORTING ev_fee  TYPE i.
+
+  PRIVATE SECTION.
+    DATA:
+      mv_do    TYPE i,
+      mv_late  TYPE i,
+      mv_rdate TYPE i,
+      mv_sdate TYPE i,
+      mv_res   TYPE i.
+ENDCLASS.
+
+
+CLASS lcl_event IMPLEMENTATION.
+  METHOD handle_double_click.
+    PERFORM handle_double_click USING e_row e_column es_row_no.
+  ENDMETHOD.
+
+  METHOD handle_on_toolbar.
+    PERFORM on_toolbar USING e_object.
+  ENDMETHOD.
+
+   METHOD on_user_command.
+    PERFORM on_user_command USING e_ucomm gv_rowid.
+
+  ENDMETHOD.
+ENDCLASS.
+
+CLASS lcl_overfee IMPLEMENTATION.
+  METHOD get_overfee.
+    mv_rdate = iv_date.
+    mv_sdate = sy-datum.
+
+    IF mv_sdate &gt; mv_rdate.
+      mv_late = mv_sdate - mv_rdate.
+      DO mv_late TIMES.
+        ADD 300 TO mv_res.
+      ENDDO.
+    ELSE.
+      mv_res = 0.
+    ENDIF.
+
+    ev_fee = mv_res.
+  ENDMETHOD.
+ENDCLASS.
+</pre>
+<hr>
+<font size="2" face = "Sans Serif">Extracted by Direct Download Enterprise version 1.3.1 - E.G.Mellodew. 1998-2005 UK. Sap Release 754
+</font>
+</body>
+</html>

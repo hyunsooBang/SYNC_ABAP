@@ -1,0 +1,105 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<title>MZEXAM1_B15_I01_C</title>
+</head>
+<body bgcolor="#FFFFE0">
+<font size="3" face = "Arial" color="#000000"><b>Code listing for: MZEXAM1_B15_I01_C</b></font>
+<br>
+<font size="3" face = "Arial" color="#000000"><b>Description:  Include MZEXAM1_B15_I01</b></font>
+<hr>
+<pre width="100">
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& Include          MZEXAM1_B15_I01</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Module  USER_COMMAND_0100  INPUT</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+MODULE user_command_0100 INPUT.
+  CASE ok_code.
+    WHEN 'BACK'.
+      LEAVE TO SCREEN 0.
+    WHEN 'FC1' OR 'FC2'.
+      my_tabstrip-activetab = ok_code.
+  ENDCASE.
+ENDMODULE.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Module  EXIT  INPUT</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+MODULE exit INPUT.
+  CASE ok_code.
+    WHEN 'CANCEL'.
+      CLEAR: gs_member, ztmember_b15, ztbook_b15, ztrent_b15, gs_book, icon.
+      LEAVE TO SCREEN 100.
+    WHEN 'EXIT'.
+      LEAVE PROGRAM.
+  ENDCASE.
+ENDMODULE.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Module  CHECK_STUDENT  INPUT</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+MODULE check_member INPUT.
+  SELECT SINGLE * FROM ztmember_b15
+   INTO CORRESPONDING FIELDS OF gs_member
+   WHERE mb_id = ztmember_b15-mb_id.
+
+  CHECK sy-subrc &lt;&gt; 0.
+  MESSAGE e007(bc410).
+ENDMODULE.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Module  USER_COMMAND_0110  INPUT</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+MODULE user_command_0110 INPUT.
+  CASE ok_code.
+    WHEN 'FCPUSH'.
+      MOVE-CORRESPONDING ztbook_b15 TO gs_rent.
+      gs_rent-mb_id = gs_member-mb_id.
+      gs_rent-rent_dt = sy-datum.
+      gs_rent-rplan_dt = sy-datum + 14.
+      gs_rent-return_st = 'A'.
+      gs_rent-changed_by = sy-uname.
+      gs_rent-changed_on = sy-datum.
+      gs_rent-changed_time = sy-uzeit.
+
+      MODIFY ztrent_b15 FROM gs_rent.
+      IF sy-subrc = 0.
+        MESSAGE TEXT-s01 TYPE 'S'.
+      ELSE.
+        MESSAGE TEXT-e01 TYPE 'W'.
+      ENDIF.
+  ENDCASE.
+
+ENDMODULE.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Module  USER_COMMAND_0120  INPUT</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+MODULE user_command_0120 INPUT.
+
+ENDMODULE.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Module  CHECK_BOOK  INPUT</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+MODULE check_book INPUT.
+
+      SELECT SINGLE * FROM ztbook_b15
+     INTO CORRESPONDING FIELDS OF ztbook_b15
+     WHERE book_id = ztbook_b15-book_id.
+ENDMODULE.
+</pre>
+<hr>
+<font size="2" face = "Sans Serif">Extracted by Direct Download Enterprise version 1.3.1 - E.G.Mellodew. 1998-2005 UK. Sap Release 754
+</font>
+</body>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<title>ZREXAM3_B15_TOP</title>
+</head>
+<body bgcolor="#FFFFE0">
+<font size="3" face = "Arial" color="#000000"><b>Code listing for: ZREXAM3_B15_TOP</b></font>
+<br>
+<font size="3" face = "Arial" color="#000000"><b>Description:  Include ZREXAM3_B15_TOP</b></font>
+<hr>
+<pre width="100">
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& Include          ZREXAM3_B15_TOP</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+
+
+<font color ="#0000FF">*---------</font>
+<font color ="#0000FF">* top</font>
+<font color ="#0000FF">*---------</font>
+
+TABLES: ztmember_b15, ztrent_b15, ztbook_b15. "사용할 테이블 선언
+
+DATA: lv_date TYPE string.
+
+DATA: ok_code LIKE sy-ucomm.
+
+DATA: BEGIN OF gs_rent,
+         status    TYPE c LENGTH 1,
+         mb_id     TYPE ztrent_b15-mb_id,
+         mb_nm     TYPE ztmember_b15-mb_nm,
+         book_id   TYPE ztrent_b15-book_id,
+         book_nm   TYPE ztbook_b15-book_nm,
+         rent_dt   TYPE ztrent_b15-rent_dt,
+         rplan_dt  TYPE ztrent_b15-rplan_dt,
+         return_st TYPE ztrent_b15-return_st,
+         return_st_txt like DD07T-DDTEXT,
+         return_dt TYPE ztrent_b15-return_dt,
+         mb_st     TYPE ztmember_b15-mb_st,
+           it_field_colors  TYPE lvc_t_scol,
+       END OF gs_rent.
+
+DATA: gt_rent LIKE STANDARD TABLE OF gs_rent.
+data:  gv_answer type C,
+      return_st_txt type string.
+
+
+DATA: BEGIN OF gs_split,
+        mb_id      like ztrent_b15-mb_id,
+        book_id    like ztrent_b15-book_id,
+        book_nm    like ztbook_b15-book_nm,
+        rent_dt    like ztrent_b15-rent_dt,
+        rplan_dt   like ztrent_b15-rplan_dt,
+        rentprice  type i,
+        currency   type string, "s_curr,
+        cell_color type lvc_t_scol,
+<font color ="#0000FF">*        row_color  TYPE c LENGTH 4,</font>
+      END OF gs_split.
+
+
+DATA: gt_split  LIKE TABLE OF gs_split,
+      gs_member TYPE ztmember_b15,
+      gt_member LIKE TABLE OF gs_member.
+DATA : gs_cell TYPE lvc_s_scol.
+
+DATA: gs_rent_table TYPE ztrent_b15,
+      gt_rent_table type ztrent_b15.
+
+"메인 데이터 (1번)
+DATA: go_alv_grid  TYPE REF TO cl_gui_alv_grid, "클래스 참조변수 선언
+<font color ="#0000FF">*      go_docking   TYPE REF TO cl_gui_docking_container, "global object 선언</font>
+      go_container TYPE REF TO cl_gui_custom_container. "global object 선언
+
+DATA: gs_variant TYPE disvariant.
+
+"2번 데이터 (split)
+DATA : gc_grid TYPE REF TO cl_gui_alv_grid.
+DATA : gc_grid2 TYPE REF TO cl_gui_alv_grid.
+DATA : gc_docking TYPE REF TO cl_gui_docking_container.
+DATA : gc_split TYPE REF TO cl_gui_splitter_container.
+DATA : gc_container TYPE REF TO cl_gui_container.
+DATA : gc_container2 TYPE REF TO cl_gui_container.
+
+
+
+" layout을 위해 필요한 data
+DATA: gs_layout      TYPE lvc_s_layo,
+      gs_field_color TYPE lvc_s_scol.
+
+DATA : gs_layo TYPE lvc_s_layo.
+DATA : gs_layo2 TYPE lvc_s_layo.
+
+
+"Sort
+DATA : gs_sort  TYPE lvc_s_sort,
+       gt_sort  TYPE lvc_t_sort,
+       gt_sort2 TYPE lvc_t_sort.
+
+
+<font color ="#0000FF">* field catalog</font>
+DATA : gs_fcat TYPE lvc_s_fcat.
+DATA : gt_fcat1 TYPE lvc_t_fcat.
+DATA : gt_fcat2 TYPE lvc_t_fcat.
+
+DATA: gt_field_cat TYPE lvc_t_fcat,
+      gs_field_cat TYPE lvc_s_fcat.
+
+
+
+<font color ="#0000FF">* event class</font>
+CLASS lcl_event DEFINITION DEFERRED.
+DATA : go_event TYPE REF TO lcl_event.
+
+<font color ="#0000FF">* overfee class</font>
+CLASS lcl_overfee DEFINITION DEFERRED.
+DATA: go_fee TYPE REF TO lcl_overfee.
+
+
+
+
+
+<font color ="#0000FF">* screen</font>
+
+SELECTION-SCREEN BEGIN OF BLOCK bl_opt WITH FRAME TITLE TEXT-tlo. "첫번째 radio 버튼 블락
+  PARAMETERS: p1 USER-COMMAND radio RADIOBUTTON GROUP cnt1 DEFAULT 'X', "sflight기본선택
+              p2 RADIOBUTTON GROUP cnt1.
+SELECTION-SCREEN END OF BLOCK bl_opt.
+
+SELECTION-SCREEN SKIP 1.
+
+SELECTION-SCREEN BEGIN OF BLOCK bl_field WITH FRAME TITLE TEXT-tlf. "두번째 바뀌는 블락
+  SELECT-OPTIONS: so_id FOR ztmember_b15-mb_id MODIF ID fg .
+  PARAMETERS: pa_sta LIKE ztmember_b15-mb_st DEFAULT 'A' MODIF ID pf . "fg = 펑션코드
+  "No.. 대신에 parameter로 해도 상관 ㄴ
+  SELECT-OPTIONS: so_dat FOR ztrent_b15-rplan_dt MODIF ID pf .
+
+
+SELECTION-SCREEN END OF BLOCK bl_field.
+</pre>
+<hr>
+<font size="2" face = "Sans Serif">Extracted by Direct Download Enterprise version 1.3.1 - E.G.Mellodew. 1998-2005 UK. Sap Release 754
+</font>
+</body>
+</html>

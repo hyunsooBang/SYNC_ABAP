@@ -1,0 +1,149 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<title>ZR_EXAM1_B15</title>
+</head>
+<body bgcolor="#FFFFE0">
+<font size="3" face = "Arial" color="#000000"><b>Code listing for: ZR_EXAM1_B15</b></font>
+<br>
+<font size="3" face = "Arial" color="#000000"><b>Description:  Program ZR_EXAM1_B15</b></font>
+<hr>
+<pre width="100">
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& Report ZR_EXAM1_B15</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+REPORT zr_exam1_b15.
+
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& Include          ZR_EXAM1_B15_TOP</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+TABLES: saplane, scarr, sbuspart, sscrfields.
+CONSTANTS gc_x VALUE 'X'.
+
+SELECTION-SCREEN FUNCTION KEY 1.
+
+
+SELECTION-SCREEN BEGIN OF BLOCK b1 WITH FRAME TITLE TEXT-t01.
+  PARAMETERS p_scarr TYPE scarr-carrid MEMORY ID scarr.
+  SELECT-OPTIONS: s_scarr FOR scarr-carrid.
+SELECTION-SCREEN END OF BLOCK b1.
+
+SELECTION-SCREEN BEGIN OF BLOCK b2 WITH FRAME TITLE TEXT-t02 NO INTERVALS.
+  SELECT-OPTIONS: s_ftype FOR saplane-planetype NO-EXTENSION,
+                  s_prod FOR saplane-producer,
+                  s_aid FOR scarr-carrid.
+SELECTION-SCREEN END OF BLOCK b2.
+
+SELECTION-SCREEN BEGIN OF LINE.
+  SELECTION-SCREEN COMMENT 1(10) TEXT-p01 FOR FIELD p_scarr2.
+  PARAMETERS : p_scarr2 TYPE scarr-carrid.
+
+  SELECTION-SCREEN COMMENT 20(15) TEXT-p02 FOR FIELD p_cname.
+  PARAMETERS : p_cname TYPE scarr-carrname.
+
+SELECTION-SCREEN END OF LINE.
+
+SELECTION-SCREEN SKIP 1.
+
+SELECTION-SCREEN BEGIN OF BLOCK b3 WITH FRAME TITLE TEXT-t03.
+  PARAMETERS p_fpnum TYPE sbuspart-buspartnum.
+  SELECTION-SCREEN SKIP 1.
+  SELECTION-SCREEN BEGIN OF BLOCK b4 WITH FRAME TITLE TEXT-t04.
+    PARAMETERS: p1 RADIOBUTTON GROUP cnt1,
+                p2 RADIOBUTTON GROUP cnt1 DEFAULT 'X',
+                p3 RADIOBUTTON GROUP cnt1.
+  SELECTION-SCREEN END OF BLOCK b4.
+SELECTION-SCREEN END OF BLOCK b3.
+
+PARAMETERS: p_flag1 AS CHECKBOX DEFAULT gc_x.
+PARAMETERS: p_flag2 AS CHECKBOX.
+
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& Include          ZR_EXAM1_B15_E01</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+
+INITIALIZATION.
+
+  SET TITLEBAR 'TITLE_1000'.
+
+  LOOP AT SCREEN.
+    IF screen-name = 'P_CNAME'.
+      screen-input = 0.
+    ENDIF.
+    MODIFY SCREEN.
+  ENDLOOP.
+
+  MOVE TEXT-fb1 TO sscrfields-functxt_01.
+
+  MOVE: 'I' TO s_scarr-sign,
+        'BT' TO s_scarr-option,
+        'AC' TO s_scarr-low,
+        'AZ' TO s_scarr-high.
+
+  APPEND s_scarr.
+  CLEAR s_scarr.
+
+  MOVE: 'I' TO s_scarr-sign,
+        'EQ' TO s_scarr-option,
+        'AA' TO s_scarr-low.
+
+  APPEND s_scarr.
+  CLEAR s_scarr.
+
+  MOVE: 'E' TO s_scarr-sign,
+        'EQ' TO s_scarr-option,
+        'LT' TO s_scarr-low.
+
+  APPEND s_scarr.
+
+AT SELECTION-SCREEN.
+
+  IF sscrfields-ucomm = 'FC01'.
+    MESSAGE '기능키 구현 완료' TYPE 'I'.
+  ENDIF.
+
+<font color ="#0000FF">*GUI Texts</font>
+<font color ="#0000FF">*----------------------------------------------------------</font>
+<font color ="#0000FF">* TITLE_1000 --&gt; [CL2-B15] Selection Screen</font>
+
+<font color ="#0000FF">*Text elements</font>
+<font color ="#0000FF">*----------------------------------------------------------</font>
+<font color ="#0000FF">* FB1 Call subscreen</font>
+<font color ="#0000FF">* P01 Airline ID</font>
+<font color ="#0000FF">* P02 Airline Name</font>
+<font color ="#0000FF">* T01 Selection Condition</font>
+<font color ="#0000FF">* T02 No Interval Block</font>
+<font color ="#0000FF">* T03 Airline Partner</font>
+<font color ="#0000FF">* T04 Business Partner Type</font>
+
+
+<font color ="#0000FF">*Selection texts</font>
+<font color ="#0000FF">*----------------------------------------------------------</font>
+<font color ="#0000FF">* P1         Customer</font>
+<font color ="#0000FF">* P2         Travel Agency</font>
+<font color ="#0000FF">* P3         Etc.</font>
+<font color ="#0000FF">* P_CNAME         Airline Name</font>
+<font color ="#0000FF">* P_FLAG1         Check box 1 (checked)</font>
+<font color ="#0000FF">* P_FLAG2         Check box 2</font>
+<font color ="#0000FF">* P_FPNUM         Flight Partner Type</font>
+<font color ="#0000FF">* P_SCARR         Airline ID (SAP memory)</font>
+<font color ="#0000FF">* P_SCARR2         Airline ID</font>
+<font color ="#0000FF">* S_AID         Airline ID</font>
+<font color ="#0000FF">* S_FTYPE         Flight Type</font>
+<font color ="#0000FF">* S_PROD         Producer</font>
+<font color ="#0000FF">* S_SCARR         Airline ID (Initial value)</font>
+
+
+<font color ="#0000FF">*Messages</font>
+<font color ="#0000FF">*----------------------------------------------------------</font>
+<font color ="#0000FF">*</font>
+<font color ="#0000FF">* Message class: Hard coded</font>
+<font color ="#0000FF">*   기능키 구현 완료</font>
+</pre>
+<hr>
+<font size="2" face = "Sans Serif">Extracted by Direct Download Enterprise version 1.3.1 - E.G.Mellodew. 1998-2005 UK. Sap Release 754
+</font>
+</body>
+</html>

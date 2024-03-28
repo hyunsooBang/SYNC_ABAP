@@ -1,0 +1,995 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<title>ZREXAM3_B15_F01</title>
+</head>
+<body bgcolor="#FFFFE0">
+<font size="3" face = "Arial" color="#000000"><b>Code listing for: ZREXAM3_B15_F01</b></font>
+<br>
+<font size="3" face = "Arial" color="#000000"><b>Description:  Include ZREXAM3_B15_F01</b></font>
+<hr>
+<pre width="100">
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& Include          ZREXAM3_B15_F01</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& Form create_container</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& text</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& --&gt;  p1        text</font>
+<font color ="#0000FF">*& &lt;--  p2        text</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+FORM create_container .
+
+  CREATE OBJECT go_container
+    EXPORTING
+      container_name = 'MY_CONTROL'
+    EXCEPTIONS
+      OTHERS         = 1.
+
+  IF sy-subrc &lt;&gt; 0.
+    MESSAGE a010(bc405_408).
+  ENDIF.
+
+  CREATE OBJECT go_alv_grid
+    EXPORTING
+      i_parent = go_container
+    EXCEPTIONS
+      OTHERS   = 1.
+  IF sy-subrc &lt;&gt; 0.
+    MESSAGE a010(bc405_408).
+  ENDIF.
+
+
+
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& Form set_layout</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& text</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& --&gt;  p1        text</font>
+<font color ="#0000FF">*& &lt;--  p2        text</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+FORM set_layout .
+  gs_layout-zebra      = 'X'. "행 얼룩무늬
+  gs_layout-sel_mode    = 'A'.
+  gs_layout-cwidth_opt  = 'X'. "열 너비 최적화
+
+  gs_layout-excp_fname = 'STATUS'. "light이름 가진 col을 예외
+  gs_layout-excp_led   = 'X'. "신호등 하나만 보이게 123
+<font color ="#0000FF">*  gs_layout-info_fname  = 'COLOR'. "line (=row) color coding 값 전달</font>
+<font color ="#0000FF">*  gs_layout-ctab_fname = 'cell_color'.</font>
+<font color ="#0000FF">*  gs_layout-ctab_fname = 'it_field_colors'.</font>
+
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& Form set_fcat</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& text</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& --&gt;  p1        text</font>
+<font color ="#0000FF">*& &lt;--  p2        text</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+FORM set_fcat .
+  CLEAR gs_field_cat.
+  gs_field_cat-fieldname = 'MB_ST'.
+  gs_field_cat-no_out    = 'X'.
+  APPEND gs_field_cat TO gt_field_cat.
+
+  CLEAR gs_field_cat.
+  gs_field_cat-fieldname = 'STATUS'.
+  gs_field_cat-coltext   = '상태'.
+  APPEND gs_field_cat TO gt_field_cat.
+
+  CLEAR gs_field_cat.
+  gs_field_cat-fieldname = 'MB_ID'.
+  gs_field_cat-coltext   = '회원번호'.
+  gs_field_cat-col_pos = 1.
+  gs_field_cat-just    = 'L'.
+  gs_field_cat-key = 'X'.
+  gs_fcat-dd_outlen = 10.
+  APPEND gs_field_cat TO gt_field_cat.
+
+  CLEAR gs_field_cat.
+  gs_field_cat-fieldname = 'MB_NM'.
+  gs_field_cat-coltext   = '회원이름'.
+  gs_field_cat-col_pos = 2.
+  gs_field_cat-just    = 'L'.
+  gs_field_cat-key = 'X'.
+  gs_fcat-dd_outlen = 10.
+  APPEND gs_field_cat TO gt_field_cat.
+
+  CLEAR gs_field_cat.
+  gs_field_cat-fieldname = 'BOOK_ID'.
+  gs_field_cat-coltext   = '도서번호'.
+  gs_field_cat-col_pos = 3.
+  gs_field_cat-key = space.
+  gs_field_cat-just    = 'L'.
+  gs_fcat-dd_outlen = 10.
+  APPEND gs_field_cat TO gt_field_cat.
+
+  CLEAR gs_field_cat.
+  gs_field_cat-fieldname = 'BOOK_NM'.
+  gs_field_cat-coltext   = '도서명'.
+  gs_field_cat-col_pos = 4.
+  gs_field_cat-just    = 'L'.
+  gs_fcat-dd_outlen = 20.
+  APPEND gs_field_cat TO gt_field_cat.
+
+  CLEAR gs_field_cat.
+  gs_field_cat-fieldname = 'RENT_DT'.
+  gs_field_cat-coltext   = '대여일'.
+  gs_field_cat-col_pos = 5.
+  gs_field_cat-just    = 'L'.
+  gs_field_cat-key = space.
+  gs_fcat-dd_outlen = 10.
+  APPEND gs_field_cat TO gt_field_cat.
+
+  CLEAR gs_field_cat.
+  gs_field_cat-fieldname = 'RPLAN_DT'.
+  gs_field_cat-coltext   = '반납예정일'.
+  gs_field_cat-col_pos = 6.
+  gs_field_cat-just    = 'L'.
+  gs_fcat-dd_outlen = 10.
+  APPEND gs_field_cat TO gt_field_cat.
+
+  CLEAR gs_field_cat.
+  gs_field_cat-fieldname = 'RETURN_ST'.
+
+  gs_field_cat-just    = 'L'.
+  gs_field_cat-no_out    = 'X'.
+  gs_fcat-dd_outlen = 10.
+  APPEND gs_field_cat TO gt_field_cat.
+
+  CLEAR gs_field_cat.
+  gs_field_cat-fieldname = 'RETURN_ST_TXT'.
+  gs_field_cat-coltext   = '반납여부'.
+  gs_field_cat-col_pos = 7.
+  gs_field_cat-just    = 'L'.
+  gs_fcat-dd_outlen = 10.
+  APPEND gs_field_cat TO gt_field_cat.
+
+  CLEAR gs_field_cat.
+  gs_field_cat-fieldname = 'RETURN_DT'.
+  gs_field_cat-coltext   = '반납완료일'.
+  gs_field_cat-just    = 'L'.
+  gs_fcat-dd_outlen = 10.
+  APPEND gs_field_cat TO gt_field_cat.
+
+  CLEAR gs_field_cat.
+  gs_field_cat-fieldname = 'CHANGED_ON'.
+  gs_field_cat-no_out    = 'X'.
+  APPEND gs_field_cat TO gt_field_cat.
+
+  CLEAR gs_field_cat.
+  gs_field_cat-fieldname = 'CHANGED_BY'.
+  gs_field_cat-no_out    = 'X'.
+  APPEND gs_field_cat TO gt_field_cat.
+  CLEAR gs_field_cat.
+  gs_field_cat-fieldname = 'CHANGED_TIME'.
+  gs_field_cat-no_out    = 'X'.
+  APPEND gs_field_cat TO gt_field_cat.
+
+
+
+<font color ="#0000FF">*---------------------------------------</font>
+
+
+
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& Form set_sorting</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& text</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& --&gt;  p1        text</font>
+<font color ="#0000FF">*& &lt;--  p2        text</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+FORM set_sorting .
+  gs_sort-fieldname = 'MB_ID'.
+  gs_sort-spos      = 1.
+  "    gs_sorting_criterion-down = 'X'. 내림차순일듯  up도 잇음
+  APPEND gs_sort TO gt_sort.
+
+  gs_sort-fieldname = 'MB_NM'.
+  gs_sort-spos      = 2.
+  APPEND gs_sort TO gt_sort.
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& Form display_grid</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& text</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& --&gt;  p1        text</font>
+<font color ="#0000FF">*& &lt;--  p2        text</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+FORM display_grid .
+  CALL METHOD go_alv_grid-&gt;set_table_for_first_display
+    EXPORTING
+      i_structure_name = 'ZTRENT_B15'
+      is_variant       = gs_variant
+      i_save           = 'A'
+      is_layout        = gs_layout
+    CHANGING
+      it_fieldcatalog  = gt_field_cat
+      it_outtab        = gt_rent
+      it_sort          = gt_sort
+    EXCEPTIONS
+      OTHERS           = 1.
+  IF sy-subrc &lt;&gt; 0.
+    MESSAGE a012(bc405_408).
+  ENDIF.
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& Form get_data</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& text</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& --&gt;  p1        text</font>
+<font color ="#0000FF">*& &lt;--  p2        text</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+FORM get_data .
+  SELECT
+    c~mb_id
+    a~mb_nm
+    c~book_id
+    b~book_nm
+    c~rent_dt
+    c~rplan_dt
+    c~return_st
+    c~return_dt
+    a~mb_st
+    INTO CORRESPONDING FIELDS OF TABLE gt_rent
+    FROM ztrent_b15 AS c
+    INNER JOIN ztmember_b15 AS a
+    ON c~mb_id EQ a~mb_id
+    INNER JOIN  ztbook_b15 AS b
+    ON c~book_id EQ b~book_id
+    WHERE a~mb_id IN so_id
+    AND a~mb_st EQ pa_sta
+    AND c~rplan_dt IN so_dat
+    ORDER BY c~mb_id
+             c~book_id.
+
+
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& Form make_data</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& text</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& --&gt;  p1        text</font>
+<font color ="#0000FF">*& &lt;--  p2        text</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+FORM make_data .
+  LOOP AT gt_rent INTO gs_rent.
+    "연체 or 현재날짜보다 반납예정일이 지났는데 대여중일 때
+    IF gs_rent-return_st = 'F' OR
+       gs_rent-return_st = 'A' AND gs_rent-rplan_dt &lt; sy-datum.
+      gs_rent-status = 1.
+
+      " 대여중인데 반납예정일 안지남
+    ELSEIF gs_rent-return_st = 'A' AND gs_rent-rplan_dt &gt;= sy-datum.
+      gs_rent-status = 2.
+
+      "대여가능 B
+    ELSE.
+      gs_rent-status = 3.
+    ENDIF.
+
+
+    "텍스트 값으로 변경
+    CALL FUNCTION 'STF4_GET_DOMAIN_VALUE_TEXT'
+      EXPORTING
+        iv_domname    = 'ZD_RST_B15'
+        iv_value      = gs_rent-return_st
+      IMPORTING
+        ev_value_text = gs_rent-return_st_txt.
+<font color ="#0000FF">*     EXCEPTIONS</font>
+<font color ="#0000FF">*       VALUE_NOT_FOUND       = 1</font>
+<font color ="#0000FF">*       OTHERS                = 2</font>
+    .
+    IF sy-subrc &lt;&gt; 0.
+<font color ="#0000FF">* Implement suitable error handling here</font>
+    ENDIF.
+
+
+<font color ="#0000FF">*    "no color</font>
+<font color ="#0000FF">*    IF gs_rent-book_id is not INITIAL.</font>
+<font color ="#0000FF">*     gs_field_color-fname = 'BOOK_ID'.</font>
+<font color ="#0000FF">**     gs_field_color-nokeycol = 'X'.</font>
+<font color ="#0000FF">*      APPEND gs_field_color TO gs_rent-it_field_colors.</font>
+<font color ="#0000FF">*</font>
+<font color ="#0000FF">*    ENDIF.</font>
+
+
+
+
+    MODIFY gt_rent FROM gs_rent. "TRANSPORTING status return_st_txt.
+  ENDLOOP.
+ENDFORM.
+
+FORM display_data.
+  DESCRIBE TABLE gt_rent. "건수(sy-tfill)
+  "gt_flights에 이미 값이 있으면 새로 불러오지 않음
+  IF gt_rent IS NOT INITIAL.
+    MESSAGE s002 WITH sy-tfill.
+    CALL SCREEN 100.
+  ELSE.
+<font color ="#0000FF">*  message s000 with text-s01.</font>
+    MESSAGE s001 DISPLAY LIKE 'E'. "type(1) + id(3)
+    LEAVE TO LIST-PROCESSING AND RETURN TO SCREEN 0.
+  ENDIF.
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& Form create_object</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& text</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& --&gt;  p1        text</font>
+<font color ="#0000FF">*& &lt;--  p2        text</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+FORM create_object .
+  CREATE OBJECT gc_docking
+    EXPORTING
+<font color ="#0000FF">*     PARENT    =</font>
+      repid     = sy-repid
+      dynnr     = sy-dynnr
+      "SIDE                        = DOCK_AT_LEFT
+      extension = 1550
+<font color ="#0000FF">*     STYLE     =</font>
+<font color ="#0000FF">*     LIFETIME  = lifetime_default</font>
+<font color ="#0000FF">*     CAPTION   =</font>
+<font color ="#0000FF">*     METRIC    = 0</font>
+<font color ="#0000FF">*     RATIO     =</font>
+<font color ="#0000FF">*     NO_AUTODEF_PROGID_DYNNR     =</font>
+<font color ="#0000FF">*     NAME      =</font>
+<font color ="#0000FF">*  EXCEPTIONS</font>
+<font color ="#0000FF">*     CNTL_ERROR                  = 1</font>
+<font color ="#0000FF">*     CNTL_SYSTEM_ERROR           = 2</font>
+<font color ="#0000FF">*     CREATE_ERROR                = 3</font>
+<font color ="#0000FF">*     LIFETIME_ERROR              = 4</font>
+<font color ="#0000FF">*     LIFETIME_DYNPRO_DYNPRO_LINK = 5</font>
+<font color ="#0000FF">*     OTHERS    = 6</font>
+    .
+  IF sy-subrc &lt;&gt; 0.
+<font color ="#0000FF">* MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO</font>
+<font color ="#0000FF">*            WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.</font>
+  ENDIF.
+
+
+  CREATE OBJECT gc_split
+    EXPORTING
+<font color ="#0000FF">*     LINK_DYNNR        =</font>
+<font color ="#0000FF">*     LINK_REPID        =</font>
+<font color ="#0000FF">*     SHELLSTYLE        =</font>
+<font color ="#0000FF">*     LEFT    =</font>
+<font color ="#0000FF">*     TOP     =</font>
+<font color ="#0000FF">*     WIDTH   =</font>
+<font color ="#0000FF">*     HEIGHT  =</font>
+<font color ="#0000FF">*     METRIC  = cntl_metric_dynpro</font>
+<font color ="#0000FF">*     ALIGN   = 15</font>
+      parent  = gc_docking
+      rows    = 2
+      columns = 1
+<font color ="#0000FF">*     NO_AUTODEF_PROGID_DYNNR =</font>
+<font color ="#0000FF">*     NAME    =</font>
+<font color ="#0000FF">*  EXCEPTIONS</font>
+<font color ="#0000FF">*     CNTL_ERROR        = 1</font>
+<font color ="#0000FF">*     CNTL_SYSTEM_ERROR = 2</font>
+<font color ="#0000FF">*     OTHERS  = 3</font>
+    .
+  IF sy-subrc &lt;&gt; 0.
+<font color ="#0000FF">* MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO</font>
+<font color ="#0000FF">*            WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.</font>
+  ENDIF.
+
+
+<font color ="#0000FF">*&METHOD호출 – GET_CONTAINER---------------------------------------------*</font>
+  CALL METHOD gc_split-&gt;get_container
+    EXPORTING
+      row       = 1
+      column    = 1
+    RECEIVING
+      container = gc_container.
+
+  CALL METHOD gc_split-&gt;get_container
+    EXPORTING
+      row       = 2
+      column    = 1
+    RECEIVING
+      container = gc_container2.
+
+  " Container에 grid 붙이기 ---------------------------------------------
+  CREATE OBJECT gc_grid
+    EXPORTING
+<font color ="#0000FF">*     I_SHELLSTYLE      = 0</font>
+<font color ="#0000FF">*     I_LIFETIME        =</font>
+      i_parent = gc_container
+<font color ="#0000FF">*     I_APPL_EVENTS     = SPACE</font>
+<font color ="#0000FF">*     I_PARENTDBG       =</font>
+<font color ="#0000FF">*     I_APPLOGPARENT    =</font>
+<font color ="#0000FF">*     I_GRAPHICSPARENT  =</font>
+<font color ="#0000FF">*     i_name   = '항공편 정보'</font>
+<font color ="#0000FF">*     I_FCAT_COMPLETE   = SPACE</font>
+<font color ="#0000FF">*     O_PREVIOUS_SRAL_HANDLER =</font>
+<font color ="#0000FF">*  EXCEPTIONS</font>
+<font color ="#0000FF">*     ERROR_CNTL_CREATE = 1</font>
+<font color ="#0000FF">*     ERROR_CNTL_INIT   = 2</font>
+<font color ="#0000FF">*     ERROR_CNTL_LINK   = 3</font>
+<font color ="#0000FF">*     ERROR_DP_CREATE   = 4</font>
+<font color ="#0000FF">*     OTHERS   = 5</font>
+    .
+  IF sy-subrc &lt;&gt; 0.
+<font color ="#0000FF">* MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO</font>
+<font color ="#0000FF">*            WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.</font>
+  ENDIF.
+
+  CREATE OBJECT gc_grid2
+    EXPORTING
+<font color ="#0000FF">*     I_SHELLSTYLE      = 0</font>
+<font color ="#0000FF">*     I_LIFETIME        =</font>
+      i_parent = gc_container2
+<font color ="#0000FF">*     I_APPL_EVENTS     = SPACE</font>
+<font color ="#0000FF">*     I_PARENTDBG       =</font>
+<font color ="#0000FF">*     I_APPLOGPARENT    =</font>
+<font color ="#0000FF">*     I_GRAPHICSPARENT  =</font>
+<font color ="#0000FF">*     i_name   = '항공편별 예약 정보'</font>
+<font color ="#0000FF">*     I_FCAT_COMPLETE   = SPACE</font>
+<font color ="#0000FF">*     O_PREVIOUS_SRAL_HANDLER =</font>
+<font color ="#0000FF">*  EXCEPTIONS</font>
+<font color ="#0000FF">*     ERROR_CNTL_CREATE = 1</font>
+<font color ="#0000FF">*     ERROR_CNTL_INIT   = 2</font>
+<font color ="#0000FF">*     ERROR_CNTL_LINK   = 3</font>
+<font color ="#0000FF">*     ERROR_DP_CREATE   = 4</font>
+<font color ="#0000FF">*     OTHERS   = 5</font>
+    .
+  IF sy-subrc &lt;&gt; 0.
+<font color ="#0000FF">* MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO</font>
+<font color ="#0000FF">*            WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.</font>
+  ENDIF.
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& Form handle_double_click</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& text</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      --&gt; E_ROW</font>
+<font color ="#0000FF">*&      --&gt; E_COLUMN</font>
+<font color ="#0000FF">*&      --&gt; ES_ROW_NO</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+FORM handle_double_click  USING    p_e_row TYPE lvc_s_row
+                                   p_e_column TYPE lvc_s_col
+                                   p_es_row_no TYPE lvc_s_roid.
+
+
+  CLEAR gs_member.
+  READ TABLE gt_member INTO gs_member INDEX p_e_row-index.
+
+  PERFORM get_make_split_data USING gs_member-mb_id.
+  PERFORM display_split_data.
+
+
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& Form set_split_fcat</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& text</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& --&gt;  p1        text</font>
+<font color ="#0000FF">*& &lt;--  p2        text</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+FORM set_split_fcat .
+
+  CLEAR gs_field_cat.
+  gs_field_cat-fieldname = 'BOOK_ID'.
+  gs_field_cat-coltext = '도서번호'.
+  gs_field_cat-just    = 'L'.
+  gs_field_cat-key = 'X'.
+  gs_fcat-intlen = 10.
+  gs_fcat-col_pos = 1.
+  APPEND gs_field_cat TO gt_fcat2.
+
+  CLEAR gs_field_cat.
+  gs_field_cat-fieldname = 'BOOK_NM'.
+  gs_field_cat-coltext = '도서명'.
+  gs_field_cat-just    = 'L'.
+  gs_field_cat-key = 'X'.
+  gs_fcat-intlen = 20.
+  APPEND gs_field_cat TO gt_fcat2.
+
+  CLEAR gs_field_cat.
+  gs_field_cat-fieldname = 'RENT_DT'.
+  gs_field_cat-coltext = '대여일'.
+  gs_field_cat-just    = 'L'.
+  gs_fcat-intlen = 10.
+  APPEND gs_field_cat TO gt_fcat2.
+
+  CLEAR gs_field_cat.
+  gs_field_cat-fieldname = 'RPLAN_DT'.
+  gs_field_cat-coltext = '반납예정일'.
+  gs_field_cat-just    = 'L'.
+  gs_fcat-intlen = 10.
+  APPEND gs_field_cat TO gt_fcat2.
+
+  CLEAR gs_field_cat.
+  gs_field_cat-fieldname = 'RENTPRICE'.
+  gs_field_cat-just    = 'R'.
+  gs_field_cat-coltext = '연체료'.
+  gs_field_cat-do_sum = 'X'.
+  gs_fcat-intlen = 15.
+  APPEND gs_field_cat TO gt_fcat2.
+
+
+  CLEAR gs_field_cat.
+  gs_field_cat-fieldname = 'CURRENCY'.
+  gs_field_cat-just    = 'L'.
+  gs_field_cat-coltext = '통화'.
+  gs_fcat-intlen = 5.
+  APPEND gs_field_cat TO gt_fcat2.
+
+
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& Form set_layout2</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& text</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& --&gt;  p1        text</font>
+<font color ="#0000FF">*& &lt;--  p2        text</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+FORM set_layout2 .
+  gs_layo2-ctab_fname = 'CELL_COLOR'.
+  gs_layo2-sel_mode = 'A'.
+  gs_layo2-grid_title = '대여도서 반납처리'.
+  gs_layo2-smalltitle = 'X'.
+
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& Form call_alv</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& text</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& --&gt;  p1        text</font>
+<font color ="#0000FF">*& &lt;--  p2        text</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+FORM call_alv .
+  CALL METHOD gc_grid-&gt;set_table_for_first_display
+    EXPORTING
+<font color ="#0000FF">*     I_BUFFER_ACTIVE =</font>
+<font color ="#0000FF">*     I_BYPASSING_BUFFER            =</font>
+<font color ="#0000FF">*     I_CONSISTENCY_CHECK           =</font>
+      "i_structure_name = 'ZTMEMBER_B15'
+<font color ="#0000FF">*     IS_VARIANT      =</font>
+<font color ="#0000FF">*     I_SAVE          =</font>
+<font color ="#0000FF">*     I_DEFAULT       = 'X'</font>
+      is_layout       = gs_layo
+<font color ="#0000FF">*     IS_PRINT        =</font>
+<font color ="#0000FF">*     IT_SPECIAL_GROUPS             =</font>
+<font color ="#0000FF">*     IT_TOOLBAR_EXCLUDING          =</font>
+<font color ="#0000FF">*     IT_HYPERLINK    =</font>
+<font color ="#0000FF">*     IT_ALV_GRAPHICS =</font>
+<font color ="#0000FF">*     IT_EXCEPT_QINFO =</font>
+<font color ="#0000FF">*     IR_SALV_ADAPTER =</font>
+    CHANGING
+      it_outtab       = gt_member
+      it_fieldcatalog = gt_fcat1
+<font color ="#0000FF">*     IT_SORT         =</font>
+<font color ="#0000FF">*     IT_FILTER       =</font>
+<font color ="#0000FF">*  EXCEPTIONS</font>
+<font color ="#0000FF">*     INVALID_PARAMETER_COMBINATION = 1</font>
+<font color ="#0000FF">*     PROGRAM_ERROR   = 2</font>
+<font color ="#0000FF">*     TOO_MANY_LINES  = 3</font>
+<font color ="#0000FF">*     OTHERS          = 4</font>
+    .
+  IF sy-subrc &lt;&gt; 0.
+<font color ="#0000FF">* Implement suitable error handling here</font>
+  ENDIF.
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& Form call_alv2</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& text</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& --&gt;  p1        text</font>
+<font color ="#0000FF">*& &lt;--  p2        text</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+FORM call_alv2 .
+  CALL METHOD gc_grid2-&gt;set_table_for_first_display
+    EXPORTING
+<font color ="#0000FF">*     I_BUFFER_ACTIVE =</font>
+<font color ="#0000FF">*     I_BYPASSING_BUFFER            =</font>
+<font color ="#0000FF">*     I_CONSISTENCY_CHECK           =</font>
+      "i_structure_name = 'ZTRENT_B15'
+<font color ="#0000FF">*     IS_VARIANT      =</font>
+<font color ="#0000FF">*     I_SAVE          =</font>
+<font color ="#0000FF">*     I_DEFAULT       = 'X'</font>
+      is_layout       = gs_layo2
+<font color ="#0000FF">*     IS_PRINT        =</font>
+<font color ="#0000FF">*     IT_SPECIAL_GROUPS             =</font>
+<font color ="#0000FF">*     IT_TOOLBAR_EXCLUDING          =</font>
+<font color ="#0000FF">*     IT_HYPERLINK    =</font>
+<font color ="#0000FF">*     IT_ALV_GRAPHICS =</font>
+<font color ="#0000FF">*     IT_EXCEPT_QINFO =</font>
+<font color ="#0000FF">*     IR_SALV_ADAPTER =</font>
+    CHANGING
+      it_outtab       = gt_split
+      it_fieldcatalog = gt_fcat2
+<font color ="#0000FF">*     IT_SORT         =</font>
+<font color ="#0000FF">*     IT_FILTER       =</font>
+<font color ="#0000FF">*  EXCEPTIONS</font>
+<font color ="#0000FF">*     INVALID_PARAMETER_COMBINATION = 1</font>
+<font color ="#0000FF">*     PROGRAM_ERROR   = 2</font>
+<font color ="#0000FF">*     TOO_MANY_LINES  = 3</font>
+<font color ="#0000FF">*     OTHERS          = 4</font>
+    .
+  IF sy-subrc &lt;&gt; 0.
+<font color ="#0000FF">* Implement suitable error handling here</font>
+  ENDIF.
+
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& Form exit</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& text</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& --&gt;  p1        text</font>
+<font color ="#0000FF">*& &lt;--  p2        text</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+FORM exit .
+  CASE ok_code.
+    WHEN 'BACK'.
+      SET SCREEN 0.
+    WHEN 'CANCEL'.
+<font color ="#0000FF">*      CLEAR</font>
+      LEAVE TO SCREEN 100.
+    WHEN 'EXIT'.
+      LEAVE PROGRAM.
+  ENDCASE.
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& Form get_data_member</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& text</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& --&gt;  p1        text</font>
+<font color ="#0000FF">*& &lt;--  p2        text</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+FORM get_data_member .
+  SELECT
+        *
+        INTO CORRESPONDING FIELDS OF TABLE gt_member
+        FROM ztmember_b15
+        WHERE mb_id IN so_id.
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& Form display_data_member</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& text</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& --&gt;  p1        text</font>
+<font color ="#0000FF">*& &lt;--  p2        text</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+FORM display_data_member .
+  DESCRIBE TABLE gt_member. "건수(sy-tfill)
+  "gt_flights에 이미 값이 있으면 새로 불러오지 않음
+  IF gt_member IS NOT INITIAL.
+    MESSAGE s002 WITH sy-tfill.
+    CALL SCREEN 200.
+  ELSE.
+<font color ="#0000FF">*  message s000 with text-s01.</font>
+    MESSAGE s001 DISPLAY LIKE 'E'. "type(1) + id(3)
+    LEAVE TO LIST-PROCESSING AND RETURN TO SCREEN 0.
+  ENDIF.
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& Form get_make_split_data</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& text</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& --&gt;  p1        text</font>
+<font color ="#0000FF">*& &lt;--  p2        text</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+FORM get_make_split_data USING p_mb_id TYPE ztmember_b15-mb_id.
+  DATA: lv_plan TYPE ztrent_b15-rplan_dt,
+        lv_fee  TYPE i.
+
+  SELECT
+    a~book_id
+    b~book_nm
+    a~rent_dt
+    a~rplan_dt
+    FROM ztrent_b15 AS a
+    INNER JOIN ztbook_b15 AS b
+    ON a~book_id = b~book_id
+    INTO CORRESPONDING FIELDS OF TABLE gt_split
+    WHERE mb_id = p_mb_id.
+
+  CLEAR gs_split.
+
+  LOOP AT gt_split INTO gs_split.
+    lv_plan = gs_split-rplan_dt.
+
+    " object생성해서 값가져오기
+    CREATE OBJECT go_fee.
+    " 메소드 호출
+    go_fee-&gt;get_overfee(
+    EXPORTING
+    iv_date = lv_plan
+    IMPORTING
+    ev_fee = lv_fee ).
+
+
+    IF lv_fee &lt;&gt; 0.
+      gs_split-rentprice = lv_fee.
+      gs_split-currency = 'KRW'.
+      gs_cell-fname = 'RENTPRICE'.
+      gs_cell-color-col = col_negative.
+      gs_cell-color-int = 0.
+      gs_cell-color-inv = 0.
+      APPEND gs_cell TO gs_split-cell_color.
+      CLEAR gs_cell.
+    ELSE.
+      gs_split-rentprice = 0.
+    ENDIF.
+
+    MODIFY gt_split FROM gs_split.
+    CLEAR gs_split.
+  ENDLOOP.
+
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& Form set_event</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& text</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& --&gt;  p1        text</font>
+<font color ="#0000FF">*& &lt;--  p2        text</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+FORM set_event .
+  CREATE OBJECT go_event.
+  SET HANDLER : go_event-&gt;handle_double_click FOR gc_grid,
+                go_event-&gt;handle_on_toolbar FOR gc_grid2,
+                go_event-&gt;on_user_command FOR gc_grid2.
+
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& Form on_toolbar</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& text</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      --&gt; E_OBJECT</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+FORM on_toolbar  USING    p_object.
+  DATA: ls_button TYPE stb_button,
+        ls_object TYPE REF TO cl_alv_event_toolbar_set.
+
+  ls_object = p_object.
+
+<font color ="#0000FF">*   Separator</font>
+  ls_button-butn_type = 3.
+  INSERT ls_button INTO TABLE ls_object-&gt;mt_toolbar.
+
+  CLEAR ls_button.
+  ls_button-function  = 'RETURN'. "fc code
+  ls_button-icon      = icon_annotation.    "icon
+  ls_button-text      = '반납처리'.
+  ls_button-butn_type = 0.
+  INSERT ls_button INTO TABLE ls_object-&gt;mt_toolbar. "ls_object안 toolbar 테이블에 저장
+
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& Form on_user_command</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& text</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      --&gt; E_UCOMM</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+FORM on_user_command  USING    p_ucomm TYPE sy-ucomm
+                               pv_rowid TYPE i.
+
+  DATA: lt_index TYPE lvc_t_row,
+        ls_index TYPE lvc_s_row,
+        lv_rows  TYPE i.
+
+
+  CALL METHOD gc_grid2-&gt;get_selected_rows
+    IMPORTING
+      et_index_rows = lt_index.
+
+  lv_rows = lines( lt_index ).
+
+
+  CASE p_ucomm.
+    WHEN 'RETURN'.
+      IF lv_rows = 0.
+        MESSAGE '반납처리 대상을 선택하세요' TYPE 'I'.
+      ELSEIF lv_rows &lt;&gt; 1.
+        MESSAGE '한 건씩만 선택하세요.' TYPE 'I'.
+      ELSE.
+
+        "한줄 ROW에 대한 인덱스를 변수로 전달
+        LOOP AT lt_index INTO ls_index.
+          pv_rowid = ls_index-index.
+        ENDLOOP.
+
+        CALL FUNCTION 'POPUP_TO_CONFIRM'
+          EXPORTING
+            titlebar              = TEXT-pt1
+            text_question         = TEXT-ptq
+            text_button_1         = TEXT-pb1
+            icon_button_1         = '@01@'
+            text_button_2         = TEXT-pb2
+            icon_button_2         = '@02@'
+            display_cancel_button = ''
+          IMPORTING
+            answer                = gv_answer.
+        IF sy-subrc &lt;&gt; 0. " 팝업 로드 자체에 오류 발생했을 때
+          MESSAGE '팝업 로드 중 에러가 발생했습니다.' TYPE 'W'.
+        ELSE. "팝업 로드 시에는 오류 ㄴㄴ
+          IF gv_answer EQ '1'. "만약 네를 클릭했을 때
+
+            READ TABLE gt_split INTO gs_split INDEX pv_rowid.
+
+            SELECT SINGLE * FROM ztrent_b15 INTO CORRESPONDING FIELDS OF gs_rent_table
+            WHERE book_id = gs_split-book_id
+            AND rplan_dt = gs_split-rplan_dt
+            AND rent_dt = gs_split-rent_dt.
+
+              gs_rent_table-changed_by = sy-uname.
+              gs_rent_table-changed_on = sy-datum.
+              gs_rent_table-changed_time = sy-uzeit.
+              gs_rent_table-return_st = 'B'.
+              gs_rent_table-return_dt = sy-datum.
+
+              DELETE gt_split INDEX pv_rowid.
+
+              MODIFY ztrent_b15 FROM gs_rent_table.
+
+              "modify시 오류 발생 여부 판단
+              IF sy-subrc = 0. "오류 ㄴㄴ
+                MESSAGE '반납이 완료되었습니다.' TYPE 'I'.
+                PERFORM refresh.
+              ELSE. "modify 오류 ㅇㅇ
+                MESSAGE '반납처리에 오류가 발생하였습니다.' TYPE 'W'.
+              ENDIF.
+
+           ELSE. " =2 아니오 버튼 클릭 시, (cancel 사용안하니까)
+              MESSAGE '반납처리가 취소되었습니다.' TYPE 'I'.
+          ENDIF.
+
+
+          ENDIF. "팝업로드 if
+        ENDIF. "row
+    ENDCASE.
+ENDFORM.
+FORM set_fcat2.
+
+  CLEAR gs_fcat.
+  gs_fcat-fieldname = 'MB_ID'.
+  gs_fcat-key = 'X'.
+  gs_fcat-just = 'L'.
+  gs_fcat-intlen = 10.
+  APPEND gs_fcat TO gt_fcat1.
+
+  CLEAR gs_fcat.
+  gs_fcat-fieldname = 'MB_NM'.
+  gs_fcat-key = 'X'.
+  gs_fcat-just = 'L'.
+  gs_fcat-intlen = 10.
+  APPEND gs_fcat TO gt_fcat1.
+
+  CLEAR gs_fcat.
+  gs_fcat-fieldname = 'REG_DT'.
+  gs_fcat-no_out = 'X'.
+  APPEND gs_fcat TO gt_fcat1.
+
+  CLEAR gs_fcat.
+  gs_fcat-fieldname = 'MB_ST'.
+  gs_fcat-no_out = 'X'.
+  APPEND gs_fcat TO gt_fcat1.
+
+  CLEAR gs_fcat.
+  gs_fcat-fieldname = 'TELNO'.
+  gs_fcat-just = 'L'.
+  gs_fcat-intlen = 10.
+  APPEND gs_fcat TO gt_fcat1.
+
+  CLEAR gs_fcat.
+  gs_fcat-fieldname = 'EMAIL'.
+  gs_fcat-just = 'L'.
+  gs_fcat-intlen = 20.
+  APPEND gs_fcat TO gt_fcat1.
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& Form set_variant</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& text</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& --&gt;  p1        text</font>
+<font color ="#0000FF">*& &lt;--  p2        text</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+FORM set_variant .
+  gs_variant-report = sy-cprog.
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& Form set_layo2</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& text</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& --&gt;  p1        text</font>
+<font color ="#0000FF">*& &lt;--  p2        text</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+FORM set_layo2 .
+  gs_layo-sel_mode = 'A'.
+  gs_layo-zebra = 'X'.
+  gs_layo-grid_title = '도서대여 회원내역'.
+  gs_layo-smalltitle = 'X'.
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& Form set_sorting2</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& text</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& --&gt;  p1        text</font>
+<font color ="#0000FF">*& &lt;--  p2        text</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+FORM set_sorting2 .
+  gs_sort-fieldname = 'MB_ID'.
+  gs_sort-spos      = 1.
+  APPEND gs_sort TO gt_sort2.
+ENDFORM.
+
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& Form display_split_data</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& text</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& --&gt;  p1        text</font>
+<font color ="#0000FF">*& &lt;--  p2        text</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+FORM display_split_data .
+  DESCRIBE TABLE gt_split. "건수(sy-tfill)
+  "gt_flights에 이미 값이 있으면 새로 불러오지 않음
+  IF gt_split IS NOT INITIAL.
+    MESSAGE s002 WITH sy-tfill.
+    CALL SCREEN 200.
+  ELSE.
+<font color ="#0000FF">*  message s000 with text-s01.</font>
+    MESSAGE s001 DISPLAY LIKE 'E'. "type(1) + id(3)
+    LEAVE TO LIST-PROCESSING AND RETURN TO SCREEN 0.
+  ENDIF.
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& Form refresh</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& text</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& --&gt;  p1        text</font>
+<font color ="#0000FF">*& &lt;--  p2        text</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+FORM refresh .
+  DATA : ls_stable TYPE lvc_s_stbl.
+  ls_stable-row = 'X'.
+  ls_stable-col = 'X'.
+  IF gc_grid2 IS NOT INITIAL.
+    CALL METHOD gc_grid2-&gt;refresh_table_display
+      EXPORTING
+        is_stable = ls_stable
+<font color ="#0000FF">*       I_SOFT_REFRESH =</font>
+      EXCEPTIONS
+        finished  = 1
+        OTHERS    = 2.
+    IF sy-subrc &lt;&gt; 0.
+<font color ="#0000FF">*          Implement suitable error handling here</font>
+    ENDIF.
+  ENDIF.
+ENDFORM.
+</pre>
+<hr>
+<font size="2" face = "Sans Serif">Extracted by Direct Download Enterprise version 1.3.1 - E.G.Mellodew. 1998-2005 UK. Sap Release 754
+</font>
+</body>
+</html>

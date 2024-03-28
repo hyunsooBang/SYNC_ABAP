@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<title>ZREXAM3_B15</title>
+</head>
+<body bgcolor="#FFFFE0">
+<font size="3" face = "Arial" color="#000000"><b>Code listing for: ZREXAM3_B15</b></font>
+<br>
+<font size="3" face = "Arial" color="#000000"><b>Description:  Program ZREXAM3_B15</b></font>
+<hr>
+<pre width="100">
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& Report ZREXAM3_B15</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+REPORT zrexam3_b15 MESSAGE-ID zb15.
+
+include <a href ="zrexam3_b15_top.html">zrexam3_b15_top</a>.
+include <a href ="zrexam3_b15_c01.html">zrexam3_b15_c01</a>.
+include <a href ="zrexam3_b15_o01.html">zrexam3_b15_o01</a>.
+
+include <a href ="zrexam3_b15_i01.html">zrexam3_b15_i01</a>.
+include <a href ="zrexam3_b15_f01.html">zrexam3_b15_f01</a>.
+
+
+
+
+<font color ="#0000FF">*-------</font>
+<font color ="#0000FF">* event</font>
+<font color ="#0000FF">*-------</font>
+INITIALIZATION.
+  set TITLEBAR 'T01'.
+
+  CONCATENATE sy-datum+0(6) '01' INTO lv_date.
+  MOVE: 'I' TO so_dat-sign,
+        'BT' TO so_dat-option,
+         lv_date TO so_dat-low,
+        sy-datum TO so_dat-high.
+
+  APPEND so_dat.
+
+AT SELECTION-SCREEN OUTPUT. "pbo - 라디오 버튼 클릭 시 실행
+  LOOP AT SCREEN.
+    CASE screen-group1. "function code별 case
+      WHEN 'PF'.
+        IF p1 = 'X'.
+          screen-active = '1'.
+        ELSE.
+          screen-active = '0'.
+        ENDIF.
+    ENDCASE.
+    MODIFY SCREEN. "케이스문 이후 modify screen
+  ENDLOOP.
+
+START-OF-SELECTION.
+  CASE 'X'.
+    WHEN p1.
+      PERFORM get_data. "데이터베이스에서 조회조건을 기준으로 데이터 가져옴
+      PERFORM make_data. "갖고온 데이터 가공 및 처리
+      PERFORM display_data.
+    WHEN p2.
+      PERFORM get_data_member.
+      PERFORM display_data_member.
+
+
+
+    ENDCASE.
+
+<font color ="#0000FF">*GUI Texts</font>
+<font color ="#0000FF">*----------------------------------------------------------</font>
+<font color ="#0000FF">* T01 --&gt; [CL2-B15] 도서 대여 현황 조회 및 반납 처리</font>
+<font color ="#0000FF">* T100 --&gt; [CL2-B15] 회원별 도서 대여 현황</font>
+<font color ="#0000FF">* T200 --&gt; [CL2-B15] 대여 도서 반납처리</font>
+
+<font color ="#0000FF">*Text elements</font>
+<font color ="#0000FF">*----------------------------------------------------------</font>
+<font color ="#0000FF">* PB1 네</font>
+<font color ="#0000FF">* PB2 아니요</font>
+<font color ="#0000FF">* PT1 반납처리확인</font>
+<font color ="#0000FF">* PTQ 해당 대여건을 반납 처리하시겠습니까?</font>
+<font color ="#0000FF">* T01 회원별 도서 대여 현황</font>
+<font color ="#0000FF">* T02 대서 도여 반납처리</font>
+<font color ="#0000FF">* TLF 선택조건</font>
+<font color ="#0000FF">* TLO 조회조건</font>
+
+
+<font color ="#0000FF">*Selection texts</font>
+<font color ="#0000FF">*----------------------------------------------------------</font>
+<font color ="#0000FF">* P1         도서 대여 현황</font>
+<font color ="#0000FF">* P2         대여 도서 반납처리</font>
+<font color ="#0000FF">* PA_STA         회원상태</font>
+<font color ="#0000FF">* SO_DAT         반납예정일</font>
+<font color ="#0000FF">* SO_ID         회원번호</font>
+<font color ="#0000FF">* SO_ID2         회원번호</font>
+
+
+<font color ="#0000FF">*Messages</font>
+<font color ="#0000FF">*----------------------------------------------------------</font>
+<font color ="#0000FF">*</font>
+<font color ="#0000FF">* Message class: BC405_408</font>
+<font color ="#0000FF">*010   Error creating the container object</font>
+<font color ="#0000FF">*012   Error calling the method.</font>
+<font color ="#0000FF">*</font>
+<font color ="#0000FF">* Message class: Hard coded</font>
+<font color ="#0000FF">*   반납처리 대상을 선택하세요</font>
+<font color ="#0000FF">*</font>
+<font color ="#0000FF">* Message class: ZB15</font>
+<font color ="#0000FF">*001   조건에 해당하는 회원의 대여정보가 존재하지 않습니다.</font>
+<font color ="#0000FF">*002   &건의 데이터가 조회되었습니다.</font>
+</pre>
+<hr>
+<font size="2" face = "Sans Serif">Extracted by Direct Download Enterprise version 1.3.1 - E.G.Mellodew. 1998-2005 UK. Sap Release 754
+</font>
+</body>
+</html>

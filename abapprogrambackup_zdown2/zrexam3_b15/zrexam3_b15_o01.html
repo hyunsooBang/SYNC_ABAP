@@ -1,0 +1,90 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<title>ZREXAM3_B15_O01</title>
+</head>
+<body bgcolor="#FFFFE0">
+<font size="3" face = "Arial" color="#000000"><b>Code listing for: ZREXAM3_B15_O01</b></font>
+<br>
+<font size="3" face = "Arial" color="#000000"><b>Description:  Include ZREXAM3_B15_O01</b></font>
+<hr>
+<pre width="100">
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& Include          ZREXAM3_B15_O01</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& Module STATUS_0100 OUTPUT</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+MODULE status_0100 OUTPUT.
+  SET PF-STATUS 'STATUS'.
+  SET TITLEBAR 'T100'.
+ENDMODULE.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& Module CLEAR_OK_CODE OUTPUT</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+MODULE clear_ok_code OUTPUT.
+  CLEAR ok_code.
+ENDMODULE.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& Module CREATE_AND_TRANSFER OUTPUT</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+MODULE create_and_transfer OUTPUT.
+
+  IF go_container IS INITIAL.
+    PERFORM create_container.
+    PERFORM set_variant.
+    PERFORM set_layout.
+    PERFORM set_fcat.
+    PERFORM set_sorting.
+    PERFORM display_grid.
+  ELSE.
+    CALL METHOD go_alv_grid-&gt;refresh_table_display( ).
+  ENDIF.
+ENDMODULE.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& Module STATUS_0200 OUTPUT</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+MODULE status_0200 OUTPUT.
+  SET PF-STATUS 'STATUS200'.
+  SET TITLEBAR 'T200'.
+ENDMODULE.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& Module CREATE_DISPLAY2 OUTPUT</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+MODULE create_display2 OUTPUT.
+  IF gc_docking IS NOT BOUND.
+    PERFORM create_object.
+    PERFORM set_layo2.
+    PERFORM set_fcat2.
+    PERFORM set_event.
+    PERFORM set_sorting2.
+    PERFORM call_alv.
+<font color ="#0000FF">*-------</font>
+    PERFORM set_split_fcat.
+    PERFORM set_layout2.
+    PERFORM call_alv2.
+  ELSE.
+    CALL METHOD gc_grid-&gt;refresh_table_display( ).
+    CALL METHOD gc_grid2-&gt;refresh_table_display( ).
+
+    IF sy-subrc &lt;&gt; 0.
+<font color ="#0000FF">* Implement suitable error handling here</font>
+    ENDIF.
+  ENDIF.
+ENDMODULE.
+</pre>
+<hr>
+<font size="2" face = "Sans Serif">Extracted by Direct Download Enterprise version 1.3.1 - E.G.Mellodew. 1998-2005 UK. Sap Release 754
+</font>
+</body>
+</html>
